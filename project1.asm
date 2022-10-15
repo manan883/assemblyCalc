@@ -96,3 +96,19 @@ main:
 	move $a0,$t2
 	li $v0,1
 	syscall
+if:
+    beq $t0, $t1, else
+    la $a0, notSameM
+    li $v0, 4
+    syscall
+    jal end
+
+else:
+    la $a0, sameM
+    li $v0, 4
+    syscall
+    jal end
+
+end:
+    li $v0, 10
+    syscall
