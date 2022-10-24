@@ -6,6 +6,7 @@ input2: .asciiz "Enter the second input "
 operations: .asciiz "Choose one\n+\n-\n*\n/\ne(exit)"
 errorMSG: .asciiz "\nERROR INVALID INPUT\n"
 result: .asciiz "\nOutput is "
+askU: .asciiz "n(new values)\ns(same values) "
 .text
 
 main:
@@ -30,6 +31,7 @@ main:
     li $v0,5
     syscall
     move $s1,$v0
+promptOp:
     la $a0, operations
     li $v0,4
     syscall
@@ -59,7 +61,7 @@ ADD:
     la $a0,'\n'
     li $v0,11
     syscall
-    jal main
+    jal promptVals
 SUB:
     la $a0,result
     li $v0,4
@@ -71,7 +73,7 @@ SUB:
     la $a0,'\n'
     li $v0,11
     syscall
-    jal main
+    jal promptVals
 
 MUL:
     la $a0,result
@@ -84,7 +86,7 @@ MUL:
     la $a0,'\n'
     li $v0,11
     syscall
-    jal main
+    jal promptVals
 DIV:
     la $a0,result
     li $v0,4
@@ -96,8 +98,18 @@ DIV:
     la $a0,'\n'
     li $v0,11
     syscall
-    jal main
+    jal promptVals
 
+promptVals:
+    la $a0,askU
+    li $v0,4
+    syscall
+    li $v0,12
+    syscall
+    move $s3,$v0
+    beq $s3,'s',promptOp
+    beq $s3,'n',main
+    jal exit
 
 exit:
     li $v0, 10
